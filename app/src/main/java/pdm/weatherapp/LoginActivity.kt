@@ -77,7 +77,7 @@ fun LoginPage(activity: ComponentActivity) {
             Button(
                 onClick = {
                     activity.startActivity(
-                        Intent(activity, HomeActivity::class.java).setFlags(
+                        Intent(activity, MainActivity::class.java).setFlags(
                             Intent.FLAG_ACTIVITY_SINGLE_TOP
                         )
                     )
