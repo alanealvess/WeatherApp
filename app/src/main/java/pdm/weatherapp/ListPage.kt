@@ -25,15 +25,15 @@ import androidx.compose.ui.unit.sp
 
 @Preview
 @Composable
-fun HomePage() {
+fun ListPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.teal_700))
+            .background(colorResource(id = R.color.teal_200))
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "Home",
+            text = "Favoritas",
             fontWeight = FontWeight.Bold,
             color = Color.White,
             modifier = Modifier.align(Alignment.CenterHorizontally),
