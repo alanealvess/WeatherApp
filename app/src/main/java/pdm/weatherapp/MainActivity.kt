@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import pdm.weatherapp.ui.theme.WeatherAppTheme
 import androidx.activity.ComponentActivity
 import android.os.Bundle
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
@@ -16,6 +18,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
@@ -48,11 +51,9 @@ class MainActivity : ComponentActivity() {
                             Icon(Icons.Default.Add, contentDescription = "Adicionar")
                         }
                     }
-                ) {
-                    MainNavHost(navController = navController)
-                }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) { MainNavHost(navController = navController) } }
             }
         }
     }
 }
-
