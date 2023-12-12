@@ -18,6 +18,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 
@@ -30,7 +32,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+            val showDialog = remember { mutableStateOf(false) }
             WeatherAppTheme {
+                if (showDialog.value) FavCityDialog(
+                    onDismiss = { showDialog.value = false },
+                    onConfirm = { city ->
+                        if (city.isNotBlank()) viewModel.add(city)
+                        showDialog.value = false
+                    })
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -49,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavBar(navController = navController)
                     },
                     floatingActionButton = {
-                        FloatingActionButton(onClick = { }) {
+                        FloatingActionButton(onClick = { showDialog.value = true }) {
                             Icon(Icons.Default.Add, contentDescription = "Adicionar")
                         }
                     }
