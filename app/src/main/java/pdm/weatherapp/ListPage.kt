@@ -19,8 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,16 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-data class FavoriteCity(val cityName: String, var currentWeather: String)
-
-private fun getFavoriteCities() = List(30) {
-        i -> FavoriteCity(cityName = "Cidade $i", currentWeather = "Carregando clima...") }
-
-@Preview
 @Composable
-fun ListPage(modifier: Modifier = Modifier) {
+fun ListPage(viewModel: FavoriteCitiesViewModel) {
     val context = LocalContext.current
-    val cityList = remember { getFavoriteCities().toMutableStateList() }
+    val cityList: List<FavoriteCity> = viewModel.cities
 
     LazyColumn(
         modifier = Modifier
@@ -45,12 +37,14 @@ fun ListPage(modifier: Modifier = Modifier) {
             .padding(8.dp)
     ) {
         items(cityList) { city ->
-            FavoriteCityItem(favCity = city, onClose = {
-                /* TO DO */
-            }, onClick = {city ->
-                /* TO DO */
-                showToast(context, "${city.cityName} : Tempo : ${city.currentWeather}")
-            }
+            FavoriteCityItem(
+                favCity = city,
+                onClose = {
+                    viewModel.remove(city)
+                },
+                onClick = { clickedCity ->
+                    showToast(context, "${clickedCity.cityName} : Tempo : ${clickedCity.currentWeather}")
+                }
             )
         }
     }

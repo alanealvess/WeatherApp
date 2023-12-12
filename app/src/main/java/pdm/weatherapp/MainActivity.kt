@@ -26,6 +26,8 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val viewModel = FavoriteCitiesViewModel()
+
         setContent {
             val navController = rememberNavController()
             WeatherAppTheme {
@@ -34,7 +36,7 @@ class MainActivity : ComponentActivity() {
                         TopAppBar(
                             title = { Text("Bem-vindo/a!") },
                             actions = {
-                                IconButton( onClick = { finish() } ) {
+                                IconButton(onClick = { finish() }) {
                                     Icon(
                                         imageVector = Icons.Filled.ExitToApp,
                                         contentDescription = "Localized description"
@@ -52,7 +54,10 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) { MainNavHost(navController = navController) } }
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        MainNavHost(navController = navController, viewModel = viewModel)
+                    }
+                }
             }
         }
     }
