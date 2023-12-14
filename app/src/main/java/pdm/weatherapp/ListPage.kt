@@ -27,7 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ListPage(viewModel: FavoriteCitiesViewModel) {
+fun ListPage(
+    modifier: Modifier = Modifier,
+    viewModel: FavoriteCitiesViewModel,
+    context: Context
+) {
     val context = LocalContext.current
     val cityList: List<FavoriteCity> = viewModel.cities
 
