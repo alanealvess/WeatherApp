@@ -27,8 +27,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 class RegisterActivity : ComponentActivity() {
+    private lateinit var fbAuthList: FBAuthListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.fbAuthList = FBAuthListener(this)
+
         setContent {
             WeatherAppTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -36,6 +41,14 @@ class RegisterActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    override fun onStart() {
+        super.onStart()
+        Firebase.auth.addAuthStateListener(fbAuthList)
+    }
+    override fun onStop() {
+        super.onStop()
+        Firebase.auth.removeAuthStateListener(fbAuthList)
     }
 }
 
@@ -92,7 +105,6 @@ fun RegisterPage(activity: ComponentActivity) {
                         .addOnCompleteListener(activity!!) { task ->
                             if (task.isSuccessful) {
                                 Toast.makeText(activity, "Registro OK!", Toast.LENGTH_LONG).show()
-                                activity?.finish()
                             } else {
                                 Toast.makeText(activity,"Registro FALHOU!", Toast.LENGTH_LONG).show()
                             }

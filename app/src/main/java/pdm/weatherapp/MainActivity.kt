@@ -31,11 +31,15 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 class MainActivity : ComponentActivity() {
+    private lateinit var fbAuthList: FBAuthListener
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewModel = FavoriteCitiesViewModel()
+
+        this.fbAuthList = FBAuthListener(this)
 
         setContent {
             val navController = rememberNavController()
@@ -60,8 +64,7 @@ class MainActivity : ComponentActivity() {
                             title = { Text("Bem-vindo/a!") },
                             actions = {
                                 IconButton(onClick = {
-                                    Firebase.auth.signOut()
-                                    finish() }) {
+                                    Firebase.auth.signOut() }) {
                                     Icon(
                                         imageVector = Icons.Filled.ExitToApp,
                                         contentDescription = "Localized description"
@@ -88,5 +91,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    override fun onStart() {
+        super.onStart()
+        Firebase.auth.addAuthStateListener(fbAuthList)
+    }
+    override fun onStop() {
+        super.onStop()
+        Firebase.auth.removeAuthStateListener(fbAuthList)
     }
 }
