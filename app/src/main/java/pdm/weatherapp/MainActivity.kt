@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
             val showButton = currentRoute.value?.destination?.route !=
                     BottomNavItem.MapPage.route
             val launcher = rememberLauncherForActivityResult(contract =
-            ActivityResultContracts.RequestPermission(), onResult = {} )
+                ActivityResultContracts.RequestPermission(), onResult = {} )
 
             WeatherAppTheme {
                 if (showDialog.value) FavCityDialog(
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { Text("Bem-vindo/a!") },
+                            title = { Text("Bem-vindo/a ${viewModel.user.name}") },
                             actions = {
                                 IconButton(onClick = {
                                     Firebase.auth.signOut() }) {

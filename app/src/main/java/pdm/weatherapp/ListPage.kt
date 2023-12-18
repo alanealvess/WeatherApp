@@ -22,9 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pdm.weatherapp.model.FavoriteCity
 
 @Composable
 fun ListPage(
@@ -47,7 +47,7 @@ fun ListPage(
                     viewModel.remove(city)
                 },
                 onClick = { clickedCity ->
-                    Toast.makeText(context, "${clickedCity.cityName} : Tempo : ${clickedCity.currentWeather}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "${clickedCity.name} : Tempo : ${clickedCity.weather}", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -75,10 +75,10 @@ fun FavoriteCityItem(
             Spacer(modifier = Modifier.size(12.dp))
             Column(modifier = modifier.weight(1f)) {
                 Text(modifier = Modifier,
-                    text = favCity.cityName,
+                    text = favCity.name.toString(),
                     fontSize = 24.sp)
                 Text(modifier = Modifier,
-                    text = favCity.currentWeather,
+                    text = favCity.weather.toString(),
                     fontSize = 16.sp)
             }
             IconButton(onClick = onClose) {

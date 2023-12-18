@@ -56,9 +56,9 @@ fun MapPage(
             cameraPositionState = camPosState
         ) {
             viewModel.cities.forEach {
-                if (it.location != null) {
-                    Marker( state = MarkerState(position = it.location!!),
-                        title = "${it.cityName}", snippet = "${it.location}")
+                if (it.latitude != null && it.longitude != null) {
+                    Marker( state = MarkerState(position = LatLng(it.latitude!!, it.longitude!!)),
+                        title = "${it.name}", snippet = "${LatLng(it.latitude!!, it.longitude!!)}")
                 }
             }
 
