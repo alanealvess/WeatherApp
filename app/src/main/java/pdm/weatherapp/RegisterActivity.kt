@@ -15,22 +15,22 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 
-class LoginActivity : ComponentActivity() {
+class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             WeatherAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    LoginPage(this) // Passe o contexto da atividade para a função Composable
+                    RegisterPage(this)
                 }
             }
         }
@@ -39,9 +39,11 @@ class LoginActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginPage(activity: ComponentActivity) {
-    var email by remember { mutableStateOf("") }
-    var senha by remember { mutableStateOf("") }
+fun RegisterPage(activity: ComponentActivity) {
+    var emailRegister by remember { mutableStateOf("") }
+    var senhaRegister by remember { mutableStateOf("") }
+    var confirmarSenhaRegister by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -51,22 +53,30 @@ fun LoginPage(activity: ComponentActivity) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Bem-vindo(a)!",
+            text = "Registrar eMail",
             fontSize = 24.sp
         )
         Spacer(modifier = Modifier.size(24.dp))
         OutlinedTextField(
-            value = email,
+            value = emailRegister,
             label = { Text(text = "Digite seu e-mail") },
             modifier = Modifier.fillMaxWidth(),
-            onValueChange = { email = it }
+            onValueChange = { emailRegister = it }
         )
         Spacer(modifier = Modifier.size(24.dp))
         OutlinedTextField(
-            value = senha,
+            value = senhaRegister,
             label = { Text(text = "Digite sua senha") },
             modifier = Modifier.fillMaxWidth(),
-            onValueChange = { senha = it },
+            onValueChange = { senhaRegister = it },
+            visualTransformation = PasswordVisualTransformation()
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+        OutlinedTextField(
+            value = confirmarSenhaRegister,
+            label = { Text(text = "Confirme sua senha") },
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = { confirmarSenhaRegister = it },
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.size(24.dp))
@@ -76,36 +86,22 @@ fun LoginPage(activity: ComponentActivity) {
         ) {
             Button(
                 onClick = {
-                    activity.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
+                    Toast.makeText(context, "Registro realizado com sucesso !", Toast.LENGTH_SHORT).show()
                 },
-                enabled = email.isNotEmpty() && senha.isNotEmpty()
+                enabled = emailRegister.isNotEmpty() && senhaRegister.isNotEmpty() && confirmarSenhaRegister.isNotEmpty() &&
+                          senhaRegister == confirmarSenhaRegister
             ) {
-                Text("Login")
+                Text("Registrar")
             }
             Spacer(modifier = Modifier.size(24.dp))
             Button(
                 onClick = {
-                    email = ""
-                    senha = ""
+                    emailRegister = ""
+                    senhaRegister = ""
+                    confirmarSenhaRegister = ""
                 }
             ) {
                 Text("Limpar")
-            }
-            Spacer(modifier = Modifier.size(24.dp))
-            Button(
-                onClick = {
-                    activity.startActivity(
-                        Intent(activity, RegisterActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
-                }
-            ) {
-                Text("Registrar")
             }
         }
     }

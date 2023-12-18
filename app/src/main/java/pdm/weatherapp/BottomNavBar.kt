@@ -30,7 +30,7 @@ fun BottomNavBar(navController: NavHostController) {
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
-// Navegação simplificada
+                        // Navegação simplificada
                         navController.graph.startDestinationRoute?.let {
                             popUpTo(it)
                         }

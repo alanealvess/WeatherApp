@@ -47,15 +47,11 @@ fun ListPage(
                     viewModel.remove(city)
                 },
                 onClick = { clickedCity ->
-                    showToast(context, "${clickedCity.cityName} : Tempo : ${clickedCity.currentWeather}")
+                    Toast.makeText(context, "${clickedCity.cityName} : Tempo : ${clickedCity.currentWeather}", Toast.LENGTH_SHORT).show()
                 }
             )
         }
     }
-}
-
-fun showToast(context: Context, message: String) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 @Composable
