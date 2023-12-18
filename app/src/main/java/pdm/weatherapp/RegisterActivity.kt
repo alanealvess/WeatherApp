@@ -23,6 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +88,15 @@ fun RegisterPage(activity: ComponentActivity) {
         ) {
             Button(
                 onClick = {
-                    Toast.makeText(context, "Registro realizado com sucesso !", Toast.LENGTH_SHORT).show()
+                    Firebase.auth.createUserWithEmailAndPassword(emailRegister, senhaRegister)
+                        .addOnCompleteListener(activity!!) { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(activity, "Registro OK!", Toast.LENGTH_LONG).show()
+                                activity?.finish()
+                            } else {
+                                Toast.makeText(activity,"Registro FALHOU!", Toast.LENGTH_LONG).show()
+                            }
+                        }
                 },
                 enabled = emailRegister.isNotEmpty() && senhaRegister.isNotEmpty() && confirmarSenhaRegister.isNotEmpty() &&
                           senhaRegister == confirmarSenhaRegister
