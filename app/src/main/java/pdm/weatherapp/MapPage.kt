@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -23,6 +24,7 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import pdm.weatherapp.model.FavoriteCity
 
 @Composable
 fun MapPage(
@@ -48,9 +50,13 @@ fun MapPage(
             )
         }
 
+        var cityName by remember { mutableStateOf("") }
+
         GoogleMap (
             modifier = Modifier.fillMaxSize(),
-            onMapClick = { viewModel.add("Nova cidade", location = it) },
+            onMapClick = {
+                val city = FavoriteCity(name = "Nova cidade", longitude = it.longitude, latitude = it.latitude)
+                viewModel.addCity(city) },
             properties = MapProperties(isMyLocationEnabled = hasLocationPermission),
             uiSettings = MapUiSettings(myLocationButtonEnabled = true),
             cameraPositionState = camPosState

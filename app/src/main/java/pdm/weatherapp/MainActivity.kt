@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import pdm.weatherapp.model.FavoriteCity
 
 class MainActivity : ComponentActivity() {
     private lateinit var fbAuthList: FBAuthListener
@@ -55,7 +56,10 @@ class MainActivity : ComponentActivity() {
                 if (showDialog.value) FavCityDialog(
                     onDismiss = { showDialog.value = false },
                     onConfirm = { city ->
-                        if (city.isNotBlank()) viewModel.add(city)
+                        if (city.isNotBlank()) {
+                            val city = FavoriteCity(name = city)
+                            viewModel.addCity(city)
+                        }
                         showDialog.value = false
                     })
                 Scaffold(

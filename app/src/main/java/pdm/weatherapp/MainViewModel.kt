@@ -3,7 +3,7 @@ package pdm.weatherapp
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.maps.model.LatLng
+import pdm.weatherapp.db.FirebaseDB
 import pdm.weatherapp.model.FavoriteCity
 import pdm.weatherapp.model.User
 
@@ -20,19 +20,25 @@ class FavoriteCitiesViewModel : ViewModel() {
             _user.value.email = tmp.email
         }
 
-    fun remove(city: FavoriteCity) {
-        _cities.remove(city)
-    }
-    fun add(city: String, location: LatLng? = null) {
-        if (location != null) {
-            _cities.add(
-                FavoriteCity(
-                    city, "Carregando clima...", latitude = location.latitude, longitude = location.longitude
-                )
-            )
+    init {
+        FirebaseDB.onUserLogin = {
+            user = it
+        }
+        FirebaseDB.onUserLogout = {
+            user.name = "..."
+        }
+        FirebaseDB.onCityAdded = {
+            _cities.add(it)
+        }
+        FirebaseDB.onCityRemoved = {
+            _cities.remove(it)
         }
     }
-}
+    fun addCity(city: FavoriteCity) {
+        FirebaseDB.add(city)
+    }
 
-fun getFavoriteCities() = List(30) {
-        i -> FavoriteCity(name = "Cidade $i", weather = "Carregando clima...") }
+    fun removeCity(city: FavoriteCity) {
+        FirebaseDB.remove(city)
+    }
+}

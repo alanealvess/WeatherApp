@@ -44,7 +44,7 @@ fun ListPage(
             FavoriteCityItem(
                 favCity = city,
                 onClose = {
-                    viewModel.remove(city)
+                    viewModel.removeCity(city)
                 },
                 onClick = { clickedCity ->
                     Toast.makeText(context, "${clickedCity.name} : Tempo : ${clickedCity.weather}", Toast.LENGTH_SHORT).show()
