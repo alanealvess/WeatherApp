@@ -22,9 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import pdm.weatherapp.model.FavoriteCity
 import pdm.weatherapp.repo.Repository
 
@@ -77,8 +79,17 @@ fun FavoriteCityItem(
                 .clickable { onClick(favCity) },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val desc = favCity.currentWeather?.weather?.get(0)?.description?:
-                        "Carregando clima..."
+            var desc = "Carregando clima ..."
+            favCity.currentWeather?.let {
+                desc = "${it.weather?.get(0)?.description} ${it.main?.temp}℃"
+            }
+            // Substitui o componente Icon
+            AsyncImage(
+                model = favCity.imageUrl,
+                modifier = Modifier.size(75.dp),
+                error = painterResource(id = R.drawable.loading),
+                contentDescription = "Imagem"
+            )
             Icon(
                 Icons.Rounded.FavoriteBorder,
                 contentDescription = "",
