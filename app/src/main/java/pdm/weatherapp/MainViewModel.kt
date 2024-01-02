@@ -8,6 +8,7 @@ import pdm.weatherapp.db.FirebaseDB
 import pdm.weatherapp.model.FavoriteCity
 import pdm.weatherapp.model.User
 import pdm.weatherapp.repo.Repository
+import pdm.weatherapp.service.WeatherForecastClasses
 
 class MainViewModel : ViewModel() {
     private val _cities = mutableStateMapOf<String, FavoriteCity>()
@@ -29,6 +30,8 @@ class MainViewModel : ViewModel() {
             if (tmp.forecast == null)
                 Repository.loadForecast(tmp) // triggers onCityUpdated(...)
         }
+
+    val forecastImg = mutableStateMapOf<WeatherForecastClasses.Forecast, String?>()
 
     init {
         Repository.onUserLogin = {
