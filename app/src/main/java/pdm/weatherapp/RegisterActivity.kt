@@ -25,6 +25,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import pdm.weatherapp.db.FirebaseDB
+import pdm.weatherapp.repo.Repository
 
 class RegisterActivity : ComponentActivity() {
     private lateinit var fbAuthList: FBAuthListener
@@ -55,6 +57,7 @@ class RegisterActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterPage(activity: ComponentActivity) {
+    var nomeRegister by remember { mutableStateOf("") }
     var emailRegister by remember { mutableStateOf("") }
     var senhaRegister by remember { mutableStateOf("") }
     var confirmarSenhaRegister by remember { mutableStateOf("") }
@@ -70,6 +73,13 @@ fun RegisterPage(activity: ComponentActivity) {
         Text(
             text = "Registrar eMail",
             fontSize = 24.sp
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+        OutlinedTextField(
+            value = nomeRegister,
+            label = { Text(text = "Digite seu Nome") },
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = { nomeRegister = it }
         )
         Spacer(modifier = Modifier.size(24.dp))
         OutlinedTextField(
@@ -104,20 +114,22 @@ fun RegisterPage(activity: ComponentActivity) {
                     Firebase.auth.createUserWithEmailAndPassword(emailRegister, senhaRegister)
                         .addOnCompleteListener(activity!!) { task ->
                             if (task.isSuccessful) {
+                                Repository.register(nomeRegister, emailRegister)
                                 Toast.makeText(activity, "Registro OK!", Toast.LENGTH_LONG).show()
                             } else {
                                 Toast.makeText(activity,"Registro FALHOU!", Toast.LENGTH_LONG).show()
                             }
                         }
                 },
-                enabled = emailRegister.isNotEmpty() && senhaRegister.isNotEmpty() && confirmarSenhaRegister.isNotEmpty() &&
-                          senhaRegister == confirmarSenhaRegister
+                enabled = nomeRegister.isNotEmpty() && emailRegister.isNotEmpty() && senhaRegister.isNotEmpty() &&
+                          confirmarSenhaRegister.isNotEmpty() && senhaRegister == confirmarSenhaRegister
             ) {
                 Text("Registrar")
             }
             Spacer(modifier = Modifier.size(24.dp))
             Button(
                 onClick = {
+                    nomeRegister = ""
                     emailRegister = ""
                     senhaRegister = ""
                     confirmarSenhaRegister = ""

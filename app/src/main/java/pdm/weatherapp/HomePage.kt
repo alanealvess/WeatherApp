@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun HomePage(
     modifier: Modifier = Modifier,
-    viewModel: FavoriteCitiesViewModel,
+    viewModel: MainViewModel,
     context: Context
 ) {
     Column(

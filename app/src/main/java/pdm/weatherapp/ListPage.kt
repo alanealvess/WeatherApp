@@ -25,11 +25,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pdm.weatherapp.model.FavoriteCity
+import pdm.weatherapp.repo.Repository
 
 @Composable
 fun ListPage(
     modifier: Modifier = Modifier,
-    viewModel: FavoriteCitiesViewModel,
+    viewModel: MainViewModel,
     context: Context
 ) {
     val context = LocalContext.current
@@ -44,10 +45,10 @@ fun ListPage(
             FavoriteCityItem(
                 favCity = city,
                 onClose = {
-                    viewModel.removeCity(city)
+                    Repository.remove(city)
                 },
                 onClick = { clickedCity ->
-                    Toast.makeText(context, "${clickedCity.name} : Tempo : ${clickedCity.weather}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "${clickedCity.name} : Tempo : ${clickedCity.weatherDesc}", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -78,7 +79,7 @@ fun FavoriteCityItem(
                     text = favCity.name.toString(),
                     fontSize = 24.sp)
                 Text(modifier = Modifier,
-                    text = favCity.weather.toString(),
+                    text = favCity.weatherDesc.toString(),
                     fontSize = 16.sp)
             }
             IconButton(onClick = onClose) {

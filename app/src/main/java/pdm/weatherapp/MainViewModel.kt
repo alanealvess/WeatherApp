@@ -1,37 +1,39 @@
 package pdm.weatherapp
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import pdm.weatherapp.db.FirebaseDB
 import pdm.weatherapp.model.FavoriteCity
 import pdm.weatherapp.model.User
+import pdm.weatherapp.repo.Repository
 
-class FavoriteCitiesViewModel : ViewModel() {
-    private val _cities = mutableStateListOf<FavoriteCity>()
+class MainViewModel : ViewModel() {
+    private val _cities = mutableStateMapOf<String, FavoriteCity>()
     val cities: List<FavoriteCity>
-        get() = _cities
+        get() = _cities.values.toList()
 
     private var _user = mutableStateOf(User("...", "..."))
+
     var user : User
         get() = _user.value
-        set(tmp) {
-            _user.value.name = tmp.name
-            _user.value.email = tmp.email
+        set(value) {
+            _user.value = value
         }
 
     init {
-        FirebaseDB.onUserLogin = {
+        Repository.onUserLogin = {
             user = it
         }
-        FirebaseDB.onUserLogout = {
+        Repository.onUserLogout = {
             user.name = "..."
         }
-        FirebaseDB.onCityAdded = {
-            _cities.add(it)
+        Repository.onCityAdded = {
+            _cities[it.name!!] = it
         }
-        FirebaseDB.onCityRemoved = {
-            _cities.remove(it)
+        Repository.onCityRemoved = {
+            _cities.remove(it.name)
         }
     }
     fun addCity(city: FavoriteCity) {

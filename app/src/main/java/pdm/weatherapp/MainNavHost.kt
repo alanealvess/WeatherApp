@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MainNavHost(navController: NavHostController, viewModel: FavoriteCitiesViewModel, context: Context) {
+fun MainNavHost(navController: NavHostController, viewModel: MainViewModel, context: Context) {
     val cameraPositionState = rememberCameraPositionState()
 
     NavHost(navController, startDestination = BottomNavItem.HomePage.route) {

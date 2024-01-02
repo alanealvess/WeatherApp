@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import pdm.weatherapp.model.FavoriteCity
+import pdm.weatherapp.repo.Repository
 
 class MainActivity : ComponentActivity() {
     private lateinit var fbAuthList: FBAuthListener
@@ -38,9 +39,10 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel = FavoriteCitiesViewModel()
 
         this.fbAuthList = FBAuthListener(this)
+
+        val viewModel = MainViewModel()
 
         setContent {
             val navController = rememberNavController()
@@ -55,17 +57,15 @@ class MainActivity : ComponentActivity() {
             WeatherAppTheme {
                 if (showDialog.value) FavCityDialog(
                     onDismiss = { showDialog.value = false },
-                    onConfirm = { city ->
-                        if (city.isNotBlank()) {
-                            val city = FavoriteCity(name = city)
-                            viewModel.addCity(city)
-                        }
+                    onConfirm = { cityName ->
+                        if (cityName.isNotBlank())
+                            Repository.addCity(name = cityName)
                         showDialog.value = false
                     })
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { Text("Bem-vindo/a ${viewModel.user.name}") },
+                            title = { Text("Bem-vindo(a) ${viewModel.user.name}") },
                             actions = {
                                 IconButton(onClick = {
                                     Firebase.auth.signOut() }) {
