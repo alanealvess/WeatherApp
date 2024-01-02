@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,6 +23,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val keyFile = project.rootProject.file("local.properties")
+        val props = Properties()
+        props.load(keyFile.inputStream())
+        buildConfigField ("String", "OWM_API_KEY","${props.getProperty("OWM_API_KEY")}")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -62,6 +72,8 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.navigation:navigation-compose:2.7.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     // Google maps
     implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")

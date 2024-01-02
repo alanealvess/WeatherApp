@@ -3,6 +3,7 @@ package pdm.weatherapp.repo
 import pdm.weatherapp.db.FirebaseDB
 import pdm.weatherapp.model.FavoriteCity
 import pdm.weatherapp.model.User
+import pdm.weatherapp.service.WeatherForecastService
 
 object Repository {
     var onUserLogin: ((User) -> Unit)? = null
@@ -15,11 +16,16 @@ object Repository {
         FirebaseDB.onCityAdded = { city -> onCityAdded?.invoke(city) }
         FirebaseDB.onCityRemoved = { onCityRemoved?.invoke(it) }
     }
-    fun addCity(name: String) {
-        FirebaseDB.add(FavoriteCity(name = name))
+    fun addCity(name : String) {
+        WeatherForecastService.getLocation(name) { lat, long ->
+            FirebaseDB.add(FavoriteCity(name, lat?:0.0, long?:0.0))
+        }
     }
     fun addCity(lat: Double, long: Double) {
-        FirebaseDB.add(FavoriteCity(latitude = lat, longitude = long))
+        WeatherForecastService.getName(lat, long){ name ->
+            val cityName = name ?: ("Erro@$lat:$long")
+            FirebaseDB.add(FavoriteCity(cityName, lat, long))
+        }
     }
     fun remove(city: FavoriteCity) {
         FirebaseDB.remove(city)
