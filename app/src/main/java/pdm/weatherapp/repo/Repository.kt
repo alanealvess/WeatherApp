@@ -30,6 +30,14 @@ object Repository {
                             city.imageUrl = url
                             // update UI when url available
                             onCityUpdated?.invoke(city)
+                            if (url != null) {
+                                // Load bitmap, used in Map
+                                WeatherForecastService.getBitmap(url) {
+                                    city.bitmap = it
+                                    // update UI when bitmap loaded
+                                    onCityUpdated?.invoke(city)
+                                }
+                            }
                         }
                     }
                 }

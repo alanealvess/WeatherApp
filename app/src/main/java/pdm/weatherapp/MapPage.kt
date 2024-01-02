@@ -28,6 +28,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import pdm.weatherapp.model.FavoriteCity
 import pdm.weatherapp.repo.Repository
+import pdm.weatherapp.service.WeatherForecastService
 
 @Composable
 fun MapPage(
@@ -62,10 +63,30 @@ fun MapPage(
             uiSettings = MapUiSettings(myLocationButtonEnabled = true),
             cameraPositionState = camPosState
         ) {
-            viewModel.cities.forEach {
-                if (it.latitude != null && it.longitude != null) {
-                    Marker( state = MarkerState(position = LatLng(it.latitude!!, it.longitude!!)),
-                        title = "${it.name}", snippet = "${LatLng(it.latitude!!, it.longitude!!)}")
+            viewModel.cities.forEach {city ->
+                val marker = if (city.bitmap != null)
+                    BitmapDescriptorFactory.fromBitmap(city.bitmap!!)
+                else BitmapDescriptorFactory.defaultMarker()
+                var desc = "${city.latitude}:${city.longitude}"
+                city.currentWeather?.let { w ->
+                    desc = "${w.weather?.get(0)?.description} ${w.main?.temp}℃"
+                }
+                if (city.latitude != null && city.longitude != null) {
+                    Marker(
+                        state = MarkerState(
+                            position = LatLng(city.latitude!!, city.longitude!!)),
+                        title = "${city.name}", snippet = desc,
+                        icon = marker,
+                        onClick = {_ ->
+                            if (city.bitmap == null && city.imageUrl != null) {
+                                WeatherForecastService.getBitmap(city.imageUrl!!) {
+                                    city.bitmap = it
+                                    Repository.onCityUpdated?.invoke(city)
+                                }
+                            }
+                            return@Marker false
+                        }
+                    )
                 }
             }
         }
