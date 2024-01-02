@@ -15,7 +15,8 @@ interface WeatherForecastAPI {
             Call<List<WeatherForecastClasses.Location>?>
     @GET("geo/1.0/direct?APPID=$APPID&mode=json&units=metric&limit=1&lang=pt_br")
     fun getLocation(@Query("q") name: String): Call<List<WeatherForecastClasses.Location>?>
-
     @GET("data/2.5/weather?APPID=$APPID&mode=json&units=metric&cnt=5&lang=pt_br")
     fun getCurrentWeather(@Query("q") name: String): Call<WeatherForecastClasses.CurrentWeather?>
+    @GET("data/2.5/forecast?APPID=$APPID&mode=json&units=metric&cnt=15&lang=pt_br")
+    fun getForecast(@Query("q") name: String): Call<WeatherForecastClasses.WeatherForecast?>
 }

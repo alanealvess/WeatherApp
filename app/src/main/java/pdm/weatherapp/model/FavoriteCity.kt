@@ -8,5 +8,7 @@ data class FavoriteCity (
     var latitude : Double? = null,
     var longitude : Double? = null,
     @Exclude
-    var currentWeather: WeatherForecastClasses.CurrentWeather? = null
+    var currentWeather: WeatherForecastClasses.CurrentWeather? = null,
+    @Exclude
+    var forecast: WeatherForecastClasses.WeatherForecast? = null
 )

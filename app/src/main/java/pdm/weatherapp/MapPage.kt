@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
@@ -33,7 +34,8 @@ fun MapPage(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel,
     context: Context,
-    camPosState: CameraPositionState
+    camPosState: CameraPositionState,
+    navCtrl: NavHostController
 ) {
     Column(
         modifier = Modifier

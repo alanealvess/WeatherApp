@@ -13,13 +13,13 @@ fun MainNavHost(navController: NavHostController, viewModel: MainViewModel, cont
 
     NavHost(navController, startDestination = BottomNavItem.HomePage.route) {
         composable(route = BottomNavItem.HomePage.route) {
-            HomePage(viewModel = viewModel, context = context)
+            HomePage(viewModel = viewModel, context = context, navCtrl = navController)
         }
         composable(route = BottomNavItem.ListPage.route) {
-            ListPage(viewModel = viewModel, context = context)
+            ListPage(viewModel = viewModel, context = context, navCtrl = navController)
         }
         composable(route = BottomNavItem.MapPage.route) {
-            MapPage(viewModel = viewModel, context = context, camPosState = cameraPositionState)
+            MapPage(viewModel = viewModel, context = context, camPosState = cameraPositionState, navCtrl = navController)
         }
     }
 }

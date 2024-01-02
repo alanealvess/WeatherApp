@@ -15,11 +15,19 @@ class MainViewModel : ViewModel() {
         get() = _cities.values.toList()
 
     private var _user = mutableStateOf(User("...", "..."))
-
     var user : User
         get() = _user.value
         set(value) {
             _user.value = value
+        }
+
+    private var _city = mutableStateOf(FavoriteCity(name = "NONE"))
+    var city: FavoriteCity
+        get() = _city.value
+        set(tmp) {
+            _city.value = tmp.copy()
+            if (tmp.forecast == null)
+                Repository.loadForecast(tmp) // triggers onCityUpdated(...)
         }
 
     init {
@@ -39,6 +47,9 @@ class MainViewModel : ViewModel() {
             // Força recomposição
             _cities.remove(it.name)
             _cities[it.name!!] = it.copy()
+            if (_city.value.name == it.name) {
+                _city.value = it.copy()
+            }
         }
     }
     fun addCity(city: FavoriteCity) {

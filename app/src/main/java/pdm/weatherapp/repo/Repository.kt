@@ -41,4 +41,10 @@ object Repository {
     fun register(userName: String, email: String) {
         FirebaseDB.register(userName, email)
     }
+    fun loadForecast(city : FavoriteCity) {
+        WeatherForecastService.getForecast(city.name!!) {
+            city.forecast = it
+            onCityUpdated?.invoke(city)
+        }
+    }
 }

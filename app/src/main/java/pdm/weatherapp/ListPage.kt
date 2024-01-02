@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import pdm.weatherapp.model.FavoriteCity
 import pdm.weatherapp.repo.Repository
 
@@ -31,7 +32,8 @@ import pdm.weatherapp.repo.Repository
 fun ListPage(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel,
-    context: Context
+    context: Context,
+    navCtrl: NavHostController
 ) {
     val context = LocalContext.current
     val cityList: List<FavoriteCity> = viewModel.cities
@@ -47,10 +49,14 @@ fun ListPage(
                 onClose = {
                     Repository.remove(city)
                 },
-                onClick = { clickedCity ->
-                    val desc = clickedCity.currentWeather?.weather?.get(0)?.description?:
-                    "Carregando clima..."
-                    Toast.makeText(context, "${clickedCity.name} : Tempo : ${desc}", Toast.LENGTH_SHORT).show()
+                onClick = { favCity ->
+                    viewModel.city = favCity
+                    navCtrl.navigate(BottomNavItem.HomePage.route) {
+                        navCtrl.graph.startDestinationRoute?.let {
+                            popUpTo(it)
+                        }
+                        launchSingleTop = true
+                    }
                 }
             )
         }

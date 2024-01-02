@@ -45,4 +45,31 @@ class WeatherForecastClasses {
         var snow: Map<String, Double?>? = null,
         var sys: Map<String, String?>? = null,
     )
+    data class CityDesc (
+        var id: String? = null,
+        var name: String? = null,
+        var country: String? = null,
+        var population: Long = 0,
+        var timezone: Long = 0,
+        var coord: Coordinates? = null
+    )
+    data class Forecast (
+        var dt: Long = 0,
+        var dt_txt: String? = null,
+        var main: TemperaturePressure? = null,
+        var weather: Array<Weather>? = null,
+        var clouds: Map<String, String>? = null,
+        var wind: Map<String, Double?>? = null,
+        var visibility: Long? = null,
+        var pop: Double? = null,
+        var rain: Map<String, Double?>? = null,
+        var sys: Map<String, String?>? = null,
+    )
+    data class WeatherForecast (
+        var cod: String? = null,
+        var message: Float? = null,
+        var cnt: Int? = null,
+        var list: List<Forecast>? = null,
+        var city: CityDesc? = null
+    )
 }

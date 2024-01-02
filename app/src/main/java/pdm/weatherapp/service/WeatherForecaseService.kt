@@ -18,7 +18,8 @@ object WeatherForecastService {
         forecastAPI = retrofitAPI.create(WeatherForecastAPI::class.java)
     }
 
-    private fun <T> enqueue(call: Call<T?>, onResponse: ((T?) -> Unit)? = null) {
+    private
+    fun <T> enqueue(call: Call<T?>, onResponse: ((T?) -> Unit)? = null) {
         call.enqueue(object : Callback<T?> {
             override fun onResponse(call: Call<T?>, response: Response<T?>) {
                 val obj: T? = response.body()
@@ -30,7 +31,6 @@ object WeatherForecastService {
             }
         })
     }
-
     fun getName(lat: Double, long: Double, onResponse: (String?) -> Unit) {
         val call: Call<List<WeatherForecastClasses.Location>?> = forecastAPI.getName(lat = lat, lng = long)
         enqueue(call) { list ->
@@ -38,7 +38,6 @@ object WeatherForecastService {
             onResponse(name)
         }
     }
-
     fun getLocation(name: String, onResponse: (lat: Double?, long: Double?) -> Unit) {
         val call: Call<List<WeatherForecastClasses.Location>?> = forecastAPI.getLocation(name)
         enqueue(call) { list ->
@@ -47,6 +46,10 @@ object WeatherForecastService {
     }
     fun getCurrentWeather(name: String, onResponse : (WeatherForecastClasses.CurrentWeather?) -> Unit) {
         val call: Call<WeatherForecastClasses.CurrentWeather?> = forecastAPI.getCurrentWeather(name)
+        enqueue(call) { onResponse.invoke(it) }
+    }
+    fun getForecast(name: String, onResponse : (WeatherForecastClasses.WeatherForecast?) -> Unit) {
+        val call: Call<WeatherForecastClasses.WeatherForecast?> = forecastAPI.getForecast(name)
         enqueue(call) { onResponse.invoke(it) }
     }
 }
