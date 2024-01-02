@@ -29,6 +29,8 @@ import pdm.weatherapp.db.FirebaseDB
 import pdm.weatherapp.repo.Repository
 import pdm.weatherapp.service.WeatherForecastClasses
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun HomePage(
@@ -104,6 +106,8 @@ fun CityForecastItem(
     ) {
         var date = forecast.dt_txt?:"???"
         date = date.substring(0, date.lastIndexOf(':'))
+        val formattedDate = "${date.substring(8, 10)}-${date.substring(5, 7)}-${date.substring(0, 4)} ${date.substring(11)}"
+
         val format = DecimalFormat("#.0")
         val tempMin = format.format(forecast.main?.temp_min)
         val tempMax = format.format(forecast.main?.temp_max)
@@ -114,7 +118,7 @@ fun CityForecastItem(
             contentDescription = "Description"
         )
         Spacer(modifier = Modifier.size(15.dp))
-        Text(modifier = Modifier, text = "$date", fontSize = 20.sp)
+        Text(modifier = Modifier, text = "$formattedDate", fontSize = 20.sp)
         Spacer(modifier = Modifier.size(15.dp))
         Text(modifier = Modifier, text = "$tempMin℃", fontSize = 20.sp)
         Spacer(modifier = Modifier.size(15.dp))
