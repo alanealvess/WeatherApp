@@ -10,10 +10,18 @@ object Repository {
     var onUserLogout: (() -> Unit)? = null
     var onCityAdded: ((FavoriteCity) -> Unit)? = null
     var onCityRemoved: ((FavoriteCity) -> Unit)? = null
+    var onCityUpdated: ((FavoriteCity) -> Unit)? = null
     init {
         FirebaseDB.onUserLogin = { onUserLogin?.invoke(it) }
         FirebaseDB.onUserLogout = { onUserLogout?.invoke() }
-        FirebaseDB.onCityAdded = { city -> onCityAdded?.invoke(city) }
+        FirebaseDB.onCityAdded = { city ->
+            onCityAdded?.invoke(city)
+            WeatherForecastService.getCurrentWeather(city.name!!) {
+                    currWeather ->
+                city.currentWeather = currWeather
+                onCityUpdated?.invoke(city)
+            }
+        }
         FirebaseDB.onCityRemoved = { onCityRemoved?.invoke(it) }
     }
     fun addCity(name : String) {

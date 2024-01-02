@@ -35,6 +35,11 @@ class MainViewModel : ViewModel() {
         Repository.onCityRemoved = {
             _cities.remove(it.name)
         }
+        Repository.onCityUpdated = {
+            // Força recomposição
+            _cities.remove(it.name)
+            _cities[it.name!!] = it.copy()
+        }
     }
     fun addCity(city: FavoriteCity) {
         FirebaseDB.add(city)

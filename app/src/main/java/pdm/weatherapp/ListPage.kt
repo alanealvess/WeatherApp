@@ -48,7 +48,9 @@ fun ListPage(
                     Repository.remove(city)
                 },
                 onClick = { clickedCity ->
-                    Toast.makeText(context, "${clickedCity.name} : Tempo : ${clickedCity.weatherDesc}", Toast.LENGTH_SHORT).show()
+                    val desc = clickedCity.currentWeather?.weather?.get(0)?.description?:
+                    "Carregando clima..."
+                    Toast.makeText(context, "${clickedCity.name} : Tempo : ${desc}", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -69,6 +71,8 @@ fun FavoriteCityItem(
                 .clickable { onClick(favCity) },
             verticalAlignment = Alignment.CenterVertically
         ) {
+            val desc = favCity.currentWeather?.weather?.get(0)?.description?:
+                        "Carregando clima..."
             Icon(
                 Icons.Rounded.FavoriteBorder,
                 contentDescription = "",
@@ -76,10 +80,10 @@ fun FavoriteCityItem(
             Spacer(modifier = Modifier.size(12.dp))
             Column(modifier = modifier.weight(1f)) {
                 Text(modifier = Modifier,
-                    text = favCity.name.toString(),
+                    text = favCity.name!!,
                     fontSize = 24.sp)
                 Text(modifier = Modifier,
-                    text = favCity.weatherDesc.toString(),
+                    text = desc,
                     fontSize = 16.sp)
             }
             IconButton(onClick = onClose) {
